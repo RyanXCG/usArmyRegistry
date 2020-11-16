@@ -63,6 +63,49 @@ router.get("/users", (req, res) => {
   );
 });
 
+router.get("/count", (req, res) => {
+  console.log(req.query.search);
+  let regSearch = new RegExp("^" + req.query.search);
+  User.aggregate(
+    [
+      {
+        $match: {
+          $or: [{ name: regSearch }, { sex: regSearch }, { rank: regSearch }],
+        },
+      },
+      {
+        $count: "count",
+      },
+    ],
+    (err, count) => {
+      if (err) {
+        res.status(500).send(err);
+        console.log(err);
+      }
+      res.status(200).json(count);
+    }
+  );
+  /*
+  User.find(
+    {
+      $or: [
+        { name: regSearch },
+        { sex: regSearch },
+        { rank: regSearch },
+      ],
+    },
+    null,null,
+    (err, users) => {
+      if (err) {
+        res.status(500).send(err);
+        console.log(err);
+      }
+      res.status(200).json(users);
+    }
+  );
+  */
+});
+
 router.put("/users/:id", (req, res) => {
   User.updateOne({
     firstName: req.body.firstName,

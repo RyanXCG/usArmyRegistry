@@ -60,6 +60,21 @@ export const getUsers = (params) => {
   };
 };
 
+export const getCount = (search) => {
+  return (dispatch, store) => {
+    dispatch(requestStart());
+    axios
+      .get(`/api/count?search=${search}`)
+      .then((res) => {
+        dispatch(requestSuccess(res.data));
+      })
+      .catch((err) => {
+        console.log("fail");
+        dispatch(requestFail(err));
+      });
+  };
+};
+
 export const addUser = (input) => {
   return (dispatch, store) => {
     dispatch(requestStart());
@@ -67,7 +82,7 @@ export const addUser = (input) => {
     formData.append("image", input.avatorInput);
     formData.set("name", input.nameInput);
     formData.set("rank", input.rankInput);
-    formData.set("sex", input.NameInput);
+    formData.set("sex", input.sexInput);
     formData.set("startDate", input.startDateInput);
     formData.set("phone", input.phoneInput);
     formData.set("email", input.emailInput);

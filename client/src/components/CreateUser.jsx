@@ -82,7 +82,7 @@ class CreateUser extends Component {
           <label>rank: </label>
           <br></br>
           <input
-            value={this.state.lastNameInput}
+            value={this.state.rankInput}
             onChange={this.onRankInputChange}
           ></input>
           <br></br>
