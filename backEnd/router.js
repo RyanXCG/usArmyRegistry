@@ -54,7 +54,7 @@ router.get("/users", (req, res) => {
         res.status(500).send(err);
         console.log(err);
       }
-      console.log(users);
+      //console.log(users);
       res.status(200).json(users);
     }
   );

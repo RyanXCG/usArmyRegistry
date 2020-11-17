@@ -1,6 +1,6 @@
 import { React, Component } from "react";
 import { getUsers, deleteUser } from "../actions/userActions";
-import { addPage } from "../actions/pageAction";
+import { addPage, getCount } from "../actions/pageAction";
 import { connect } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -10,13 +10,12 @@ class UserList extends Component {
     this.state = {
       hasMore: true,
     };
-    //this.getUsers = debounce(this.props.getUsers, 500);
   }
 
   componentDidMount() {
-    //console.log("pageInfo at didMount", this.props.pageInfo);
-    //console.log("pageInfo", this.props.users);
     this.props.getUsers(this.props.pageInfo);
+    // get the total number of document
+    this.props.getCount(this.props.pageInfo.search);
   }
 
   onSortButtonClicked = (button) => {
@@ -49,7 +48,7 @@ class UserList extends Component {
 
   // infinite scroll functions
   fetchMoreData = () => {
-    if (this.props.users.data.length >= 500) {
+    if (this.props.users.data.length >= this.props.pageInfo.count) {
       this.setState({ hasMore: false });
       return;
     }
@@ -214,6 +213,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     addPage: () => {
       dispatch(addPage());
+    },
+    getCount: (search) => {
+      dispatch(getCount(search));
     },
   };
 };
