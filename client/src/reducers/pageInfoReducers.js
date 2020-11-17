@@ -16,6 +16,12 @@ const pageInfoReducer = (state = initState, action) => {
         page: state.page + 1,
         err: null,
       };
+    case "UPDATE_SEARCH_SUCCESS":
+      return {
+        ...state,
+        search: action.payload,
+        err: null,
+      };
     default:
       return state;
   }

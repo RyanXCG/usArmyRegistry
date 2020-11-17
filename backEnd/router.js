@@ -39,14 +39,10 @@ router.post("/", upload.single("image"), (req, res) => {
 
 router.get("/users", (req, res) => {
   let regSearch = new RegExp("^" + req.query.search);
-  console.log("page", req.query.page);
+  console.log("query", req.query);
   User.find(
     {
-      $or: [
-        { firstName: regSearch },
-        { lastName: regSearch },
-        { sex: regSearch },
-      ],
+      $or: [{ name: regSearch }, { rank: regSearch }, { sex: regSearch }],
     },
     null,
     {
@@ -58,6 +54,7 @@ router.get("/users", (req, res) => {
         res.status(500).send(err);
         console.log(err);
       }
+      console.log(users);
       res.status(200).json(users);
     }
   );

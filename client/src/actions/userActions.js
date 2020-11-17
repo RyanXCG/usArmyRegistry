@@ -1,24 +1,24 @@
 import axios from "axios";
-function requestStart() {
+export const requestStart = () => {
   console.log("started");
   return {
     type: "USER_FETCH_START",
   };
-}
+};
 
-function requestFail(err) {
+export const requestFail = (err) => {
   return {
     type: "USER_FETCH_FAIL",
     err,
   };
-}
-function requestSuccess(data) {
+};
+export const requestSuccess = (data) => {
   console.log("success");
   return {
     type: "USER_FETCH_SUCCESS",
     data,
   };
-}
+};
 
 function postSuccess() {
   console.log("post sucess");

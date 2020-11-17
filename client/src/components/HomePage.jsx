@@ -1,10 +1,14 @@
 import React, { Component } from "react";
+import SearchBar from "./SearchBar";
 import UserList from "./UserList";
 class HomePage extends Component {
   render() {
     return (
       <div>
         <h1>US Army Personnel Registry</h1>
+        <br></br>
+        <SearchBar />
+        <br></br>
         <UserList />
         <br></br>
         <br></br>
