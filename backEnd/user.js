@@ -35,6 +35,7 @@ const userSchema = new Schema({
     type: String,
     required: false,
   },
+  //subIDs: [{ type: String, required: false }],
 });
 
 const User = mongoose.model("User", userSchema);

@@ -86,7 +86,7 @@ class EditUser extends Component {
   render() {
     return (
       <div>
-        <h1> Create New User</h1>
+        <h1> Edit User</h1>
         <label>Current Avator: </label>
         <br></br>
         <img src={`data:image/png;base64,${this.state.pic}`} width="200" />

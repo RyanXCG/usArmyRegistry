@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { addUser } from "../actions/userActions";
 import { connect } from "react-redux";
-import Axios from "axios";
+import axios from "axios";
 
 class CreateUser extends Component {
   constructor(props) {
@@ -23,14 +23,26 @@ class CreateUser extends Component {
   componentDidMount() {
     this.setState({ history: this.props.history });
     // get all the users
-    //Axios.get(`/api/users`)
-
-    this.setState({
-      allUsers: [
-        { _id: 1231231, name: "fakeName" },
-        { _id: 13413415, name: "fakeName2" },
-      ],
-    });
+    const page = 100;
+    const search = "";
+    const sortMethod = "name";
+    const sortDir = "";
+    axios
+      .get(
+        `/api/users?page=${page}&search=${search}&sortMethod=${sortMethod}&sortDir=${sortDir}`
+      )
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          allUsers: [
+            { _id: null, name: "no superior selected", email: "N/A" },
+            ...res.data,
+          ],
+        });
+      })
+      .catch((err) => {
+        console.log("get all users for selection fail");
+      });
   }
 
   onAvatorInputChange = (e) => {
@@ -59,6 +71,10 @@ class CreateUser extends Component {
 
   onEmailInputChange = (e) => {
     this.setState({ emailInput: e.target.value });
+  };
+
+  onSelectSuperiorChange = (e) => {
+    this.setState({ supID: e.target.value });
   };
 
   handleSubmit = (e) => {
@@ -125,9 +141,19 @@ class CreateUser extends Component {
             onChange={this.onEmailInputChange}
           ></input>
           <br></br>
-          <select name="allUsers">
+          <label>Superior</label>
+          <br></br>
+          <select
+            name="allUsers"
+            value={this.state.supID}
+            onChange={this.onSelectSuperiorChange}
+          >
             {this.state.allUsers.map((user) => {
-              return <option value={user._id}>{user.name}</option>;
+              return (
+                <option value={user._id} key={user._id}>
+                  {user.name}: {user.email}
+                </option>
+              );
             })}
           </select>
           <br></br>

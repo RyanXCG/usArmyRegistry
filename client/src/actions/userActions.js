@@ -86,6 +86,7 @@ export const addUser = (input) => {
     formData.set("startDate", input.startDateInput);
     formData.set("phone", input.phoneInput);
     formData.set("email", input.emailInput);
+    formData.set("supID", input.supID);
 
     const config = {
       headers: {
