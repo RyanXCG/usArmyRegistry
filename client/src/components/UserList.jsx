@@ -8,16 +8,14 @@ class UserList extends Component {
     super(props);
     this.state = {
       hasMore: true,
-      page: 1,
-      search: "",
-      sortMethod: "name",
-      sortDir: 1,
     };
     //this.getUsers = debounce(this.props.getUsers, 500);
   }
 
   componentDidMount() {
-    this.props.getUsers(this.state);
+    console.log("pageInfo", this.props.pageInfo);
+    //console.log("pageInfo", this.props.users);
+    this.props.getUsers(this.props.pageInfo.state);
   }
 
   onSortButtonClicked = (button) => {
@@ -57,10 +55,9 @@ class UserList extends Component {
     // a fake async api call like which sends
     // 20 more records in .5 secs
     this.props.getUsers({
-      ...this.state,
-      page: this.state.page + 1,
+      ...this.props.pageInfo,
+      page: this.props.pageInfo.page + 1,
     });
-    this.setState({ page: this.state.page + 1 });
   };
 
   render() {
@@ -198,6 +195,7 @@ class UserList extends Component {
 const mapStateToProps = (state) => {
   return {
     users: state.userReducer,
+    pageInfo: state.pageInfoReducer,
   };
 };
 

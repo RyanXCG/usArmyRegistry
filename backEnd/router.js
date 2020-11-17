@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post("/", upload.single("image"), (req, res) => {
-  console.log("file object", req.file);
+  //console.log("file object", req.file);
   const userToPost = new User({
     avator: {
       data: fs.readFileSync(
@@ -39,7 +39,7 @@ router.post("/", upload.single("image"), (req, res) => {
 
 router.get("/users", (req, res) => {
   let regSearch = new RegExp("^" + req.query.search);
-  console.log(req.query.page);
+  console.log("page", req.query.page);
   User.find(
     {
       $or: [
