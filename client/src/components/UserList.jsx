@@ -1,6 +1,6 @@
 import { React, Component } from "react";
 import { getUsers, deleteUser } from "../actions/userActions";
-import { addPage, getCount } from "../actions/pageAction";
+import { addPage, getCount, updateSearch } from "../actions/pageAction";
 import { connect } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { withRouter } from "react-router";
@@ -32,6 +32,11 @@ class UserList extends Component {
       sortDir: this.state.sortDir === 1 ? -1 : 1,
     });
     */
+    this.props.updateSearch({
+      ...this.props.pageInfo,
+      sortMethod: button,
+      sortDir: this.props.pageInfo.sortDir === 1 ? -1 : 1,
+    });
   };
 
   onDeleteClicked(id) {
@@ -78,9 +83,7 @@ class UserList extends Component {
                 <tr>
                   <th>Edit</th>
                   <th>Delete</th>
-                  <th>
-                    <button>Avator</button>
-                  </th>
+                  <th>Avator</th>
                   <th>
                     <button onClick={() => this.onSortButtonClicked("name")}>
                       Name
@@ -213,6 +216,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     getCount: (search) => {
       dispatch(getCount(search));
+    },
+    updateSearch: (sortInfo) => {
+      dispatch(updateSearch(sortInfo));
     },
   };
 };
