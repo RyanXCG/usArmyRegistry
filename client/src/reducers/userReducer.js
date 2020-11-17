@@ -40,9 +40,7 @@ const userReducer = (state = initState, action) => {
         err: null,
       };
     default:
-      return {
-        state,
-      };
+      return state;
   }
 };
 

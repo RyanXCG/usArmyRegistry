@@ -10,15 +10,14 @@ const initState = {
 
 const pageInfoReducer = (state = initState, action) => {
   switch (action.type) {
-    case "PAGEINFO_UPDATE":
+    case "ADD_PAGE":
       return {
         ...state,
+        page: state.page + 1,
         err: null,
       };
     default:
-      return {
-        state,
-      };
+      return state;
   }
 };
 

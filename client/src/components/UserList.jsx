@@ -1,5 +1,6 @@
 import { React, Component } from "react";
 import { getUsers, deleteUser } from "../actions/userActions";
+import { addPage } from "../actions/pageAction";
 import { connect } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -13,9 +14,9 @@ class UserList extends Component {
   }
 
   componentDidMount() {
-    console.log("pageInfo", this.props.pageInfo);
+    //console.log("pageInfo at didMount", this.props.pageInfo);
     //console.log("pageInfo", this.props.users);
-    this.props.getUsers(this.props.pageInfo.state);
+    this.props.getUsers(this.props.pageInfo);
   }
 
   onSortButtonClicked = (button) => {
@@ -52,12 +53,16 @@ class UserList extends Component {
       this.setState({ hasMore: false });
       return;
     }
-    // a fake async api call like which sends
-    // 20 more records in .5 secs
+
+    // once made sure there's more data
+    // get more user date
+    //console.log("pageInfo at adding more: ", this.props.pageInfo.state);
     this.props.getUsers({
       ...this.props.pageInfo,
       page: this.props.pageInfo.page + 1,
     });
+    // update page number in redux
+    this.props.addPage();
   };
 
   render() {
@@ -206,6 +211,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     deleteUser: (id) => {
       dispatch(deleteUser(id));
+    },
+    addPage: () => {
+      dispatch(addPage());
     },
   };
 };
