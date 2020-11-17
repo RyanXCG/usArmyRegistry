@@ -37,6 +37,29 @@ router.post("/", upload.single("image"), (req, res) => {
   userToPost.save().then((user) => res.json(user));
 });
 
+router.put("/users/:id", upload.single("image"), (req, res) => {
+  //console.log("file object", req.file);
+  User.findById(req.params.id, (err, user) => {
+    if (err) {
+      res.send(err);
+    }
+    user.avator = {
+      data: fs.readFileSync(
+        path.join(__dirname + "/uploads/" + req.file.filename)
+      ),
+      contentType: "image/png",
+    };
+    user.name = req.body.name;
+    user.rank = req.body.rank;
+    user.sex = req.body.sex;
+    user.startDate = req.body.startDate;
+    user.phone = req.body.phone;
+    user.email = req.body.email;
+    user.supID = req.body.supID;
+    user.save().then(() => res.json({ sucess: true }));
+  });
+});
+
 router.get("/users", (req, res) => {
   let regSearch = new RegExp("^" + req.query.search);
   console.log("query", req.query);
@@ -101,18 +124,6 @@ router.get("/count", (req, res) => {
     }
   );
   */
-});
-
-router.put("/users/:id", (req, res) => {
-  User.updateOne({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    sex: req.body.sex,
-    age: req.body.age,
-    password: req.body.password,
-  })
-    .then(() => res.json({ success: true }))
-    .catch((err) => res.status(404).json({ success: false }));
 });
 
 router.delete("/:id", (req, res) => {

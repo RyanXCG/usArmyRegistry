@@ -3,7 +3,7 @@ import { getUsers, deleteUser } from "../actions/userActions";
 import { addPage, getCount } from "../actions/pageAction";
 import { connect } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
-
+import { withRouter } from "react-router";
 class UserList extends Component {
   constructor(props) {
     super(props);
@@ -35,19 +35,16 @@ class UserList extends Component {
   };
 
   onDeleteClicked(id) {
-    //this.props.deleteUser(id);
+    this.props.deleteUser(id);
   }
 
   onEditClicked(user) {
-    /*
-    this.props.history.push(
-      `/${user._id}/${user.firstName}/${user.lastName}/${user.sex}/${user.age}`
-    );
-    */
+    this.props.history.push(`/editUser/${user._id}`);
   }
 
   // infinite scroll functions
   fetchMoreData = () => {
+    console.log("(this.props.users.data.length", this.props.users.data.length);
     if (this.props.users.data.length >= this.props.pageInfo.count) {
       this.setState({ hasMore: false });
       return;
@@ -220,4 +217,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserList);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(UserList)
+);

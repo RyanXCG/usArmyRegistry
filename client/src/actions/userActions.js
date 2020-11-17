@@ -28,7 +28,7 @@ function postSuccess() {
 }
 
 function putSuccess() {
-  console.log("post sucess");
+  console.log("put sucess");
   return {
     type: "UPDATE_USER",
   };
@@ -107,14 +107,22 @@ export const addUser = (input) => {
 export const updateUser = (input) => {
   return (dispatch, store) => {
     dispatch(requestStart());
+    let formData = new FormData();
+    formData.append("image", input.avatorInput);
+    formData.set("name", input.nameInput);
+    formData.set("rank", input.rankInput);
+    formData.set("sex", input.sexInput);
+    formData.set("startDate", input.startDateInput);
+    formData.set("phone", input.phoneInput);
+    formData.set("email", input.emailInput);
+
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
     axios
-      .put(`/api/users/${input.id}`, {
-        firstName: input.firstNameInput,
-        lastName: input.lastNameInput,
-        sex: input.sexInput,
-        age: parseInt(input.ageInput),
-        password: input.passwordInput,
-      })
+      .put(`/api/users/${input.id}`, formData, config)
       .then((res) => {
         dispatch(putSuccess());
         input.history.push("/");

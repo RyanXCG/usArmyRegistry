@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { addUser } from "../actions/userActions";
 import { connect } from "react-redux";
+import Axios from "axios";
 
 class CreateUser extends Component {
   constructor(props) {
@@ -15,11 +16,21 @@ class CreateUser extends Component {
       emailInput: "",
       supID: "",
       history: null,
+      allUsers: [],
     };
   }
 
   componentDidMount() {
     this.setState({ history: this.props.history });
+    // get all the users
+    //Axios.get(`/api/users`)
+
+    this.setState({
+      allUsers: [
+        { _id: 1231231, name: "fakeName" },
+        { _id: 13413415, name: "fakeName2" },
+      ],
+    });
   }
 
   onAvatorInputChange = (e) => {
@@ -75,7 +86,7 @@ class CreateUser extends Component {
           <label>Name: </label>
           <br></br>
           <input
-            value={this.state.NameInput}
+            value={this.state.nameInput}
             onChange={this.onNameInputChange}
           ></input>
           <br></br>
@@ -108,10 +119,18 @@ class CreateUser extends Component {
           ></input>
           <br></br>
           <label>Email: </label>
+          <br></br>
           <input
             value={this.state.emailInput}
             onChange={this.onEmailInputChange}
           ></input>
+          <br></br>
+          <select name="allUsers">
+            {this.state.allUsers.map((user) => {
+              return <option value={user._id}>{user.name}</option>;
+            })}
+          </select>
+          <br></br>
           <br></br>
           <button type="submit">Add User</button>
         </form>
