@@ -75,7 +75,9 @@ router.put("/users/:id", upload.single("image"), (req, res) => {
     user.startDate = req.body.startDate;
     user.phone = req.body.phone;
     user.email = req.body.email;
-    user.supID = mongoose.Types.ObjectId(req.body.supID);
+    if (req.body.supID) {
+      user.supID = mongoose.Types.ObjectId(req.body.supID);
+    }
     user.save().then(() => res.json({ sucess: true }));
   });
 });
@@ -126,6 +128,56 @@ router.get("/users", (req, res) => {
   );
 });
 
+router.get("/users/:id", (req, res) => {
+  let id = mongoose.Types.ObjectId(req.params.id);
+  User.aggregate(
+    [
+      { $match: { _id: id } },
+      {
+        $lookup: {
+          from: "users",
+          let: { sup_id: "$supID" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$_id", "$$sup_id"] } } },
+            { $project: { name: 1, email: 1 } },
+          ],
+          as: "supInfo",
+        },
+      },
+      {
+        $graphLookup: {
+          from: "users",
+          startWith: "$_id",
+          connectFromField: "_id",
+          connectToField: "supID",
+          as: "allChildren",
+        },
+      },
+      {
+        $project: {
+          avator: 1,
+          name: 1,
+          rank: 1,
+          sex: 1,
+          startDate: 1,
+          phone: 1,
+          email: 1,
+          supInfo: 1,
+          "allChildren._id": 1,
+        },
+      },
+    ],
+    (err, users) => {
+      if (err) {
+        res.status(500).send(err);
+        console.log(err);
+      }
+      //console.log(users);
+      res.status(200).json(users[0]);
+    }
+  );
+});
+
 router.get("/count", (req, res) => {
   console.log(req.query.search);
   let regSearch = new RegExp("^" + req.query.search);
@@ -161,12 +213,6 @@ router.delete("/:id", (req, res) => {
       )
       .catch((err) => res.status(404).json({ success: false }));
   });
-});
-
-router.get("/users/:id", (req, res) => {
-  User.findById(req.params.id)
-    .then((user) => res.json(user))
-    .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
 module.exports = router;

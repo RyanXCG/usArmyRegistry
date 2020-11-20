@@ -35,7 +35,7 @@ class CreateUser extends Component {
         console.log(res);
         this.setState({
           allUsers: [
-            { _id: null, name: "no superior selected", email: "N/A" },
+            { _id: "", name: "no superior selected", email: "N/A" },
             ...res.data,
           ],
         });
@@ -149,7 +149,11 @@ class CreateUser extends Component {
             onChange={this.onSelectSuperiorChange}
           >
             {this.state.allUsers.map((user) => {
-              return (
+              return user._id === supID ? (
+                <option value={user._id} key={user._id}>
+                  {user.name}: {user.email} selected
+                </option>
+              ) : (
                 <option value={user._id} key={user._id}>
                   {user.name}: {user.email}
                 </option>

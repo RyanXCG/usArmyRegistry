@@ -18,6 +18,7 @@ class EditUser extends Component {
       supID: "",
       history: null,
       pic: null,
+      allUsers: [],
     };
   }
 
@@ -25,27 +26,56 @@ class EditUser extends Component {
     console.log(this.props);
     const { id } = this.props.match.params;
     this.setState({ history: this.props.history });
+    // get all the users
+    const page = 1000000;
+    const search = "";
+    const sortMethod = "name";
+    const sortDir = 1;
     axios
-      .get(`/api/users/${id}`)
+      .get(
+        `/api/users?page=${page}&search=${search}&sortMethod=${sortMethod}&sortDir=${sortDir}`
+      )
       .then((res) => {
-        console.log(res);
-        let pic = btoa(
-          String.fromCharCode.apply(null, res.data.avator.data.data)
-        );
+        console.log("all users", res.data);
         this.setState({
-          id: res.data._id,
-          nameInput: res.data.name,
-          rankInput: res.data.rank,
-          sexInput: res.data.sex,
-          startDateInput: res.data.startDate,
-          phoneInput: res.data.phone,
-          emailInput: res.data.email,
-          supID: "",
-          pic: pic,
+          allUsers: res.data,
         });
+        axios
+          .get(`/api/users/${id}`)
+          .then((res2) => {
+            console.log("res2: ", res2);
+            let allChildrenIDs = res2.data.allChildren.map(({ _id }) => _id);
+            // allChildrens Should include the user itself
+            allChildrenIDs.push(id);
+            console.log(allChildrenIDs);
+            let validSups = this.state.allUsers.filter(
+              (user) => !allChildrenIDs.includes(user._id)
+            );
+            validSups.push({
+              _id: "",
+              name: "no superior selected",
+              email: "N/A",
+            });
+            console.log(validSups);
+            this.setState({
+              id: id,
+              nameInput: res2.data.name,
+              rankInput: res2.data.rank,
+              sexInput: res2.data.sex,
+              startDateInput: res2.data.startDate,
+              phoneInput: res2.data.phone,
+              emailInput: res2.data.email,
+              supID: res2.data.supInfo._id,
+              pic: res2.data.avator.data,
+              allUsers: validSups,
+            });
+          })
+          .catch((err) => {
+            console.log("get one user fail");
+          });
       })
       .catch((err) => {
-        console.log("get one user fail");
+        console.log("get all users for selection fail");
       });
   }
 
@@ -75,6 +105,10 @@ class EditUser extends Component {
 
   onEmailInputChange = (e) => {
     this.setState({ emailInput: e.target.value });
+  };
+
+  onSelectSuperiorChange = (e) => {
+    this.setState({ supID: e.target.value });
   };
 
   handleSubmit = (e) => {
@@ -144,6 +178,23 @@ class EditUser extends Component {
             value={this.state.emailInput}
             onChange={this.onEmailInputChange}
           ></input>
+          <br></br>
+          <label>Superior</label>
+          <br></br>
+          <select
+            name="allUsers"
+            value={this.state.supID}
+            onChange={this.onSelectSuperiorChange}
+          >
+            {this.state.allUsers.map((user) => {
+              return (
+                <option value={user._id} key={user._id}>
+                  {user.name}: {user.email}
+                </option>
+              );
+            })}
+          </select>
+          <br></br>
           <br></br>
           <button type="submit">Update User</button>
         </form>

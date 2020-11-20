@@ -52,10 +52,3 @@ export const getCount = (search) => {
       });
   };
 };
-
-/*
-  return {
-    type: "UPDATE_SEARCH",
-    payload: search,
-  };
-  */
