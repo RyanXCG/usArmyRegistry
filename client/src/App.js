@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import HomePage from "./components/HomePage";
-import { BrowserRouter, Route, Switch, withRouter } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import CreateUser from "./components/CreateUser";
 import EditUser from "./components/EditUser";
 

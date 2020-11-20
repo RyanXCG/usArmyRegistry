@@ -23,10 +23,10 @@ class CreateUser extends Component {
   componentDidMount() {
     this.setState({ history: this.props.history });
     // get all the users
-    const page = 100;
+    const page = 1000000;
     const search = "";
     const sortMethod = "name";
-    const sortDir = "";
+    const sortDir = 1;
     axios
       .get(
         `/api/users?page=${page}&search=${search}&sortMethod=${sortMethod}&sortDir=${sortDir}`

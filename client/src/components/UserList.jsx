@@ -1,6 +1,6 @@
 import { React, Component } from "react";
 import { getUsers, deleteUser } from "../actions/userActions";
-import { addPage, getCount, updateSearch } from "../actions/pageAction";
+import { addPage, getCount } from "../actions/pageAction";
 import { connect } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { withRouter } from "react-router";
@@ -17,27 +17,6 @@ class UserList extends Component {
     // get the total number of document
     this.props.getCount(this.props.pageInfo.search);
   }
-
-  onSortButtonClicked = (button) => {
-    /*
-    this.setState({
-      page: 1,
-      sortMethod: button,
-      sortDir: this.state.sortDir === 1 ? -1 : 1,
-    });
-    this.getUsers({
-      ...this.state,
-      page: 1,
-      sortMethod: button,
-      sortDir: this.state.sortDir === 1 ? -1 : 1,
-    });
-    */
-    this.props.updateSearch({
-      ...this.props.pageInfo,
-      sortMethod: button,
-      sortDir: this.props.pageInfo.sortDir === 1 ? -1 : 1,
-    });
-  };
 
   onDeleteClicked(id) {
     this.props.deleteUser(id);
@@ -78,60 +57,6 @@ class UserList extends Component {
         console.log(data.length);
         return (
           <div className="UserList">
-            <table>
-              <thead>
-                <tr>
-                  <th>Edit</th>
-                  <th>Delete</th>
-                  <th>Avator</th>
-                  <th>
-                    <button onClick={() => this.onSortButtonClicked("name")}>
-                      Name
-                    </button>
-                  </th>
-                  <th>
-                    <button onClick={() => this.onSortButtonClicked("sex")}>
-                      Sex
-                    </button>
-                  </th>
-                  <th>
-                    <button onClick={() => this.onSortButtonClicked("rank")}>
-                      Rank
-                    </button>
-                  </th>
-                  <th>
-                    <button
-                      onClick={() => this.onSortButtonClicked("startDate")}
-                    >
-                      StartDate
-                    </button>
-                  </th>
-                  <th>
-                    <button onClick={() => this.onSortButtonClicked("phone")}>
-                      Phone
-                    </button>
-                  </th>
-                  <th>
-                    <button onClick={() => this.onSortButtonClicked("email")}>
-                      Email
-                    </button>
-                  </th>
-                  <th>
-                    <button
-                      onClick={() => this.onSortButtonClicked("superior")}
-                    >
-                      Superior
-                    </button>
-                  </th>
-                  <th>
-                    <button onClick={() => this.onSortButtonClicked("numDS")}>
-                      # of D.S.
-                    </button>
-                  </th>
-                </tr>
-              </thead>
-            </table>
-
             <InfiniteScroll
               dataLength={this.props.users.data.length}
               next={this.fetchMoreData}
@@ -147,10 +72,6 @@ class UserList extends Component {
               <table>
                 <tbody style={{ height: 300, overflow: "auto" }}>
                   {data.map((user) => {
-                    let pic = btoa(
-                      String.fromCharCode.apply(null, user.avator.data.data)
-                    );
-
                     return (
                       <tr key={user._id}>
                         <td>
@@ -167,7 +88,7 @@ class UserList extends Component {
                         </td>
                         <td>
                           <img
-                            src={`data:image/png;base64,${pic}`}
+                            src={`data:image/png;base64,${user.avator.data}`}
                             width="50"
                           />
                         </td>
@@ -177,8 +98,10 @@ class UserList extends Component {
                         <td>{user.startDate}</td>
                         <td>{user.phone}</td>
                         <td>{user.email}</td>
-                        <td>{user.superior}</td>
-                        <td>{user.numDS}</td>
+                        <td>
+                          {user.supName.length !== 0 && user.supName[0].name}
+                        </td>
+                        <td>{user.subs.length}</td>
                       </tr>
                     );
                   })}
@@ -216,9 +139,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     getCount: (search) => {
       dispatch(getCount(search));
-    },
-    updateSearch: (sortInfo) => {
-      dispatch(updateSearch(sortInfo));
     },
   };
 };

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { updateSearch } from "../actions/pageAction";
+import { updatePageInfo } from "../actions/pageAction";
 
 const debounce = (cb, time) => {
   let ref;
@@ -18,7 +18,7 @@ class SearchBar extends Component {
     this.state = {
       search: "",
     };
-    this.updateSearch = debounce(this.props.updateSearch, 700);
+    this.updatePageInfo = debounce(this.props.updatePageInfo, 700);
   }
 
   componentDidMount() {
@@ -27,7 +27,7 @@ class SearchBar extends Component {
 
   onSearchInputChange = (e) => {
     this.setState({ search: e.target.value });
-    this.updateSearch({ ...this.props.pageInfo, search: e.target.value });
+    this.updatePageInfo({ ...this.props.pageInfo, search: e.target.value });
   };
 
   render() {
@@ -53,8 +53,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateSearch: (params) => {
-      dispatch(updateSearch(params));
+    updatePageInfo: (params) => {
+      dispatch(updatePageInfo(params));
     },
   };
 };

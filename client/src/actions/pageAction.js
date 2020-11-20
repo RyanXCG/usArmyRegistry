@@ -6,10 +6,10 @@ export const addPage = () => {
   };
 };
 
-function updateSearchSuccess(search) {
+function updatePageInfoSuccess(pageInfo) {
   return {
-    type: "UPDATE_SEARCH_SUCCESS",
-    payload: search,
+    type: "UPDATE_PAGEINFO_SUCCESS",
+    payload: pageInfo,
   };
 }
 
@@ -20,7 +20,7 @@ function getCountSuccess(count) {
   };
 }
 
-export const updateSearch = (params) => {
+export const updatePageInfo = (params) => {
   const { page, search, sortMethod, sortDir } = params;
   return (dispatch, store) => {
     dispatch(requestStart());
@@ -30,7 +30,7 @@ export const updateSearch = (params) => {
       )
       .then((res) => {
         dispatch(requestSuccess(res.data));
-        dispatch(updateSearchSuccess(search));
+        dispatch(updatePageInfoSuccess(params));
       })
       .catch((err) => {
         console.log("fail");

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import SearchBar from "./SearchBar";
+import TableHeadAndReset from "./TableHeadAndReset";
 import UserList from "./UserList";
 class HomePage extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ class HomePage extends Component {
         <br></br>
         <SearchBar />
         <br></br>
+        <TableHeadAndReset />
         <UserList />
         <br></br>
         <br></br>

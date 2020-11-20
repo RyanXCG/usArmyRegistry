@@ -17,12 +17,8 @@ const pageInfoReducer = (state = initState, action) => {
         page: state.page + 1,
         err: null,
       };
-    case "UPDATE_SEARCH_SUCCESS":
-      return {
-        ...state,
-        search: action.payload,
-        err: null,
-      };
+    case "UPDATE_PAGEINFO_SUCCESS":
+      return action.payload;
     case "GET_COUNT_SUCCESS":
       console.log("paload", action.payload);
       return {
