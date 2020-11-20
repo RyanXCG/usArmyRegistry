@@ -149,11 +149,7 @@ class CreateUser extends Component {
             onChange={this.onSelectSuperiorChange}
           >
             {this.state.allUsers.map((user) => {
-              return user._id === supID ? (
-                <option value={user._id} key={user._id}>
-                  {user.name}: {user.email} selected
-                </option>
-              ) : (
+              return (
                 <option value={user._id} key={user._id}>
                   {user.name}: {user.email}
                 </option>

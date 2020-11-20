@@ -59,6 +59,7 @@ router.post("/", upload.single("image"), (req, res) => {
 
 router.put("/users/:id", upload.single("image"), (req, res) => {
   //console.log("file object", req.file);
+  console.log("req.body", req.body);
   User.findById(req.params.id, (err, user) => {
     if (err) {
       res.send(err);
@@ -78,6 +79,7 @@ router.put("/users/:id", upload.single("image"), (req, res) => {
     if (req.body.supID) {
       user.supID = mongoose.Types.ObjectId(req.body.supID);
     }
+    console.log("user.supID", user.supID);
     user.save().then(() => res.json({ sucess: true }));
   });
 });
@@ -134,17 +136,6 @@ router.get("/users/:id", (req, res) => {
     [
       { $match: { _id: id } },
       {
-        $lookup: {
-          from: "users",
-          let: { sup_id: "$supID" },
-          pipeline: [
-            { $match: { $expr: { $eq: ["$_id", "$$sup_id"] } } },
-            { $project: { name: 1, email: 1 } },
-          ],
-          as: "supInfo",
-        },
-      },
-      {
         $graphLookup: {
           from: "users",
           startWith: "$_id",
@@ -162,7 +153,7 @@ router.get("/users/:id", (req, res) => {
           startDate: 1,
           phone: 1,
           email: 1,
-          supInfo: 1,
+          supID: 1,
           "allChildren._id": 1,
         },
       },

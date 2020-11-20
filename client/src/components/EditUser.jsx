@@ -65,7 +65,7 @@ class EditUser extends Component {
               startDateInput: res2.data.startDate,
               phoneInput: res2.data.phone,
               emailInput: res2.data.email,
-              supID: res2.data.supInfo._id,
+              supID: res2.data.supID ? res2.data.supID : "",
               pic: res2.data.avator.data,
               allUsers: validSups,
             });
@@ -113,7 +113,7 @@ class EditUser extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state);
+    console.log("submitted state: ", this.state);
     this.props.updateUser(this.state);
   };
 
@@ -187,7 +187,11 @@ class EditUser extends Component {
             onChange={this.onSelectSuperiorChange}
           >
             {this.state.allUsers.map((user) => {
-              return (
+              return user._id === this.state.supID ? (
+                <option value={user._id} key={user._id}>
+                  {user.name}: {user.email} selected
+                </option>
+              ) : (
                 <option value={user._id} key={user._id}>
                   {user.name}: {user.email}
                 </option>
