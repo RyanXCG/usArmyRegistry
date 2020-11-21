@@ -27,6 +27,15 @@ class UserList extends Component {
     this.props.history.push(`/editUser/${user._id}`);
   }
 
+  onEmailClicked(email) {
+    window.location.href = `mailto: ${email}`;
+  }
+
+  onPhoneClicked(phone) {
+    //window.location.href = `tel: ${phone}`;
+    window.location.href = `skype: ${phone}`;
+  }
+
   // infinite scroll functions
   fetchMoreData = () => {
     console.log("(this.props.users.data.length", this.props.users.data.length);
@@ -102,8 +111,12 @@ class UserList extends Component {
                         <td>{user.sex}</td>
                         <td>{user.rank}</td>
                         <td>{user.startDate}</td>
-                        <td>{user.phone}</td>
-                        <td>{user.email}</td>
+                        <td onClick={() => this.onPhoneClicked(user.phone)}>
+                          {user.phone}
+                        </td>
+                        <td onClick={() => this.onEmailClicked(user.email)}>
+                          {user.email}
+                        </td>
                         <td>
                           {user.supName.length !== 0 && user.supName[0].name}
                         </td>
