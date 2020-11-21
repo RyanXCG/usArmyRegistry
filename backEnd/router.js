@@ -194,16 +194,34 @@ router.get("/count", (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
-  User.findById(req.params.id).then((user) => {
-    user
-      .remove()
-      .then(() =>
-        res.json({
-          success: true,
-        })
-      )
-      .catch((err) => res.status(404).json({ success: false }));
-  });
+  //find all this id's direct children and then update their superior
+  console.log(
+    "delete requested",
+    "supID: ",
+    req.query.supID,
+    "id: ",
+    req.params.id
+  );
+  User.updateMany(
+    { supID: mongoose.Types.ObjectId(req.params.id) },
+    req.query.supID
+      ? { $set: { supID: mongoose.Types.ObjectId(req.query.supID) } }
+      : { $unset: { supID: "" } }
+  )
+    .then(() => {
+      console.log("start delete user");
+      User.findById(req.params.id).then((user) => {
+        user
+          .remove()
+          .then(() =>
+            res.json({
+              success: true,
+            })
+          )
+          .catch((err) => res.status(404).json({ success: false }));
+      });
+    })
+    .catch((err) => res.status(404).json({ success: false }));
 });
 
 module.exports = router;

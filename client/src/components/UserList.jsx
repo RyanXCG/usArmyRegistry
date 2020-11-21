@@ -18,8 +18,9 @@ class UserList extends Component {
     this.props.getCount(this.props.pageInfo.search);
   }
 
-  onDeleteClicked(id) {
-    this.props.deleteUser(id);
+  onDeleteClicked(id, supID) {
+    console.log("onDeleteClicked", id, supID);
+    this.props.deleteUser(id, supID, this.props.pageInfo);
   }
 
   onEditClicked(user) {
@@ -81,7 +82,12 @@ class UserList extends Component {
                         </td>
                         <td>
                           <button
-                            onClick={() => this.onDeleteClicked(user._id)}
+                            onClick={() =>
+                              this.onDeleteClicked(
+                                user._id,
+                                user.supID ? user.supID : ""
+                              )
+                            }
                           >
                             Delete
                           </button>
@@ -131,8 +137,8 @@ const mapDispatchToProps = (dispatch) => {
     getUsers: (params) => {
       dispatch(getUsers(params));
     },
-    deleteUser: (id) => {
-      dispatch(deleteUser(id));
+    deleteUser: (id, supID, pageInfo) => {
+      dispatch(deleteUser(id, supID, pageInfo));
     },
     addPage: () => {
       dispatch(addPage());

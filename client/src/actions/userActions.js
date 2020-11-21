@@ -1,4 +1,5 @@
 import axios from "axios";
+import { updatePageInfo } from "./pageAction";
 export const requestStart = () => {
   console.log("started");
   return {
@@ -135,13 +136,14 @@ export const updateUser = (input) => {
   };
 };
 
-export const deleteUser = (id) => {
+export const deleteUser = (id, supID, pageInfo) => {
   return (dispatch, store) => {
     dispatch(requestStart());
     axios
-      .delete(`/api/${id}`)
+      .delete(`/api/${id}?supID=${supID}`)
       .then((res) => {
-        dispatch(deleteSuccess(id));
+        //dispatch(deleteSuccess(id));
+        dispatch(updatePageInfo(pageInfo));
       })
       .catch((err) => {
         dispatch(requestFail(err));
