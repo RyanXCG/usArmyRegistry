@@ -61,6 +61,23 @@ export const getUsers = (params) => {
   };
 };
 
+// IDs is a array of ids (string)
+export const getUsersByIDs = (IDsarr) => {
+  console.log(IDsarr);
+  return (dispatch, store) => {
+    dispatch(requestStart());
+    axios
+      .post(`/api/usersByIDs`, { IDs: IDsarr })
+      .then((res) => {
+        dispatch(requestSuccess(res.data));
+      })
+      .catch((err) => {
+        console.log("fail");
+        dispatch(requestFail(err));
+      });
+  };
+};
+
 export const getCount = (search) => {
   return (dispatch, store) => {
     dispatch(requestStart());

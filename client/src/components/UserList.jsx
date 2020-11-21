@@ -1,5 +1,5 @@
 import { React, Component } from "react";
-import { getUsers, deleteUser } from "../actions/userActions";
+import { getUsers, deleteUser, getUsersByIDs } from "../actions/userActions";
 import { addPage, getCount } from "../actions/pageAction";
 import { connect } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -27,13 +27,22 @@ class UserList extends Component {
     this.props.history.push(`/editUser/${user._id}`);
   }
 
+  onPhoneClicked(phone) {
+    //window.location.href = `tel: ${phone}`;
+    window.location.href = `skype: ${phone}`;
+  }
+
   onEmailClicked(email) {
     window.location.href = `mailto: ${email}`;
   }
 
-  onPhoneClicked(phone) {
-    //window.location.href = `tel: ${phone}`;
-    window.location.href = `skype: ${phone}`;
+  onSupNameClicked(IDs) {
+    console.log("supID", IDs);
+    IDs[0] && this.props.getUsersByIDs(IDs);
+  }
+
+  onNumOfDSClicked(IDs) {
+    IDs.length && this.props.getUsersByIDs(IDs);
   }
 
   // infinite scroll functions
@@ -117,10 +126,18 @@ class UserList extends Component {
                         <td onClick={() => this.onEmailClicked(user.email)}>
                           {user.email}
                         </td>
-                        <td>
+                        <td onClick={() => this.onSupNameClicked([user.supID])}>
                           {user.supName.length !== 0 && user.supName[0].name}
                         </td>
-                        <td>{user.subs.length}</td>
+                        <td
+                          onClick={() =>
+                            this.onNumOfDSClicked(
+                              user.subs.map((obj) => obj._id)
+                            )
+                          }
+                        >
+                          {user.subs.length}
+                        </td>
                       </tr>
                     );
                   })}
@@ -133,10 +150,6 @@ class UserList extends Component {
     }
   }
 }
-
-/*
-
-*/
 
 const mapStateToProps = (state) => {
   return {
@@ -158,6 +171,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     getCount: (search) => {
       dispatch(getCount(search));
+    },
+    getUsersByIDs: (IDs) => {
+      dispatch(getUsersByIDs(IDs));
     },
   };
 };

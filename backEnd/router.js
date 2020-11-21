@@ -7,6 +7,53 @@ const router = express.Router();
 const User = require("./user");
 const multer = require("multer");
 
+router.post("/usersByIDs", (req, res) => {
+  console.log("req.body", req.body);
+  const ObjIDs = req.body.IDs.map((id) => mongoose.Types.ObjectId(id));
+  console.log("IDs", ObjIDs);
+  User.aggregate(
+    [
+      {
+        $match: {
+          $expr: {
+            $in: ["$_id", ObjIDs],
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          let: { sup_id: "$supID" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$_id", "$$sup_id"] } } },
+            { $project: { name: 1 } },
+          ],
+          as: "supName",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          let: { target_id: "$_id" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$supID", "$$target_id"] } } },
+            { $project: { _id: 1 } },
+          ],
+          as: "subs",
+        },
+      },
+    ],
+    (err, users) => {
+      if (err) {
+        res.status(500).send(err);
+        console.log(err);
+      }
+      //console.log(users);
+      res.status(200).json(users);
+    }
+  );
+});
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads");
