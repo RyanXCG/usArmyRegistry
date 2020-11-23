@@ -19,6 +19,19 @@ class EditUser extends Component {
       history: null,
       pic: null,
       allUsers: [],
+      allRanks: [
+        "General",
+        "Colonel",
+        "Major",
+        "Captain",
+        "Lieutenant",
+        "Warrant Officer",
+        "Sergeant",
+        "Corporal",
+        "Specialist",
+        "Private",
+      ],
+      avatorPreviewURL: null,
     };
   }
 
@@ -80,7 +93,10 @@ class EditUser extends Component {
   }
 
   onAvatorInputChange = (e) => {
-    this.setState({ avatorInput: e.target.files[0] });
+    this.setState({
+      avatorInput: e.target.files[0],
+      avatorPreviewURL: URL.createObjectURL(e.target.files[0]),
+    });
   };
 
   onNameInputChange = (e) => {
@@ -123,7 +139,14 @@ class EditUser extends Component {
         <h1> Edit User</h1>
         <label>Current Avator: </label>
         <br></br>
-        <img src={`data:image/png;base64,${this.state.pic}`} width="200" />
+        <img
+          src={
+            this.state.avatorPreviewURL
+              ? this.state.avatorPreviewURL
+              : `data:image/png;base64,${this.state.pic}`
+          }
+          width="200"
+        />
         <br></br>
         <form onSubmit={this.handleSubmit}>
           <label>Avator: </label>
@@ -141,41 +164,89 @@ class EditUser extends Component {
           <input
             value={this.state.nameInput}
             onChange={this.onNameInputChange}
+            required
           ></input>
           <br></br>
           <label>rank: </label>
           <br></br>
-          <input
+          <select
             value={this.state.rankInput}
             onChange={this.onRankInputChange}
-          ></input>
+            required
+          >
+            <option disabled hidden value="">
+              --select an option --
+            </option>
+            {this.state.allRanks.map((rank) => {
+              return (
+                <option value={rank} key={rank}>
+                  {rank}
+                </option>
+              );
+            })}
+          </select>
           <br></br>
           <label>Sex: </label>
           <br></br>
           <input
-            value={this.state.sexInput}
+            type="radio"
+            id="male"
+            name="gender"
+            value="male"
             onChange={this.onSexInputChange}
-          ></input>
+            checked={this.state.sexInput === "male"}
+            required
+          />
+          <label htmlFor="male">Male</label>
+          <br />
+          <input
+            type="radio"
+            id="female"
+            name="gender"
+            value="female"
+            checked={this.state.sexInput === "female"}
+            onChange={this.onSexInputChange}
+          />
+          <label htmlFor="female">Female</label>
+          <br />
+          <input
+            type="radio"
+            id="other"
+            name="gender"
+            value="other"
+            checked={this.state.sexInput === "other"}
+            onChange={this.onSexInputChange}
+          />
+          <label htmlFor="other">Other</label>
+          <br />
           <br></br>
           <label>startDate: </label>
           <br></br>
           <input
             value={this.state.startDateInput}
             onChange={this.onStartDateInputChange}
+            placeholder="MM/DD/YYYY"
+            pattern="^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}$"
+            required
           ></input>
           <br></br>
           <label>Phone: </label>
           <br></br>
           <input
+            type="number"
             value={this.state.phoneInput}
             onChange={this.onPhoneInputChange}
+            required
           ></input>
           <br></br>
           <label>Email: </label>
           <br></br>
           <input
+            type="email"
             value={this.state.emailInput}
             onChange={this.onEmailInputChange}
+            placeholder="example@xxxxx.xxx"
+            required
           ></input>
           <br></br>
           <label>Superior</label>
@@ -186,11 +257,7 @@ class EditUser extends Component {
             onChange={this.onSelectSuperiorChange}
           >
             {this.state.allUsers.map((user) => {
-              return user._id === this.state.supID ? (
-                <option value={user._id} key={user._id}>
-                  {user.name}: {user.email} selected
-                </option>
-              ) : (
+              return (
                 <option value={user._id} key={user._id}>
                   {user.name}: {user.email}
                 </option>

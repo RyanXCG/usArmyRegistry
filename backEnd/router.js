@@ -113,12 +113,15 @@ router.put("/users/:id", upload.single("image"), (req, res) => {
     if (err) {
       res.send(err);
     }
-    user.avator = {
-      data: fs.readFileSync(
-        path.join(__dirname + "/uploads/" + req.file.filename)
-      ),
-      contentType: "image/png",
-    };
+    if (req.file) {
+      user.avator = {
+        data: fs.readFileSync(
+          path.join(__dirname + "/uploads/" + req.file.filename)
+        ),
+        contentType: "image/png",
+      };
+    }
+
     user.name = req.body.name;
     user.rank = req.body.rank;
     user.sex = req.body.sex;
