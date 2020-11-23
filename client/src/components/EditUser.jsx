@@ -133,7 +133,6 @@ class EditUser extends Component {
             id="image"
             name="image"
             onChange={this.onAvatorInputChange}
-            required
           ></input>
           <br></br>
           <br></br>

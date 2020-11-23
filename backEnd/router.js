@@ -67,12 +67,14 @@ const upload = multer({ storage: storage });
 
 router.post("/", upload.single("image"), (req, res) => {
   //console.log("file object", req.file);
-  console.log(req.body);
+  let relativePath = req.file ? req.file.filename : "defaultUSArmy.png";
+  //console.log("relativePath", relativePath);
+  //console.log(req.body);
   if (req.body.supID) {
     const userToPost = new User({
       avator: {
         data: fs.readFileSync(
-          path.join(__dirname + "/uploads/" + req.file.filename)
+          path.join(__dirname + "/uploads/" + relativePath)
         ),
         contentType: "image/png",
       },
@@ -89,7 +91,7 @@ router.post("/", upload.single("image"), (req, res) => {
     const userToPost = new User({
       avator: {
         data: fs.readFileSync(
-          path.join(__dirname + "/uploads/" + req.file.filename)
+          path.join(__dirname + "/uploads/" + relativePath)
         ),
         contentType: "image/png",
       },

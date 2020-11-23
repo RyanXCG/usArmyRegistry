@@ -17,6 +17,19 @@ class CreateUser extends Component {
       supID: "",
       history: null,
       allUsers: [],
+      allRanks: [
+        "General",
+        "Colonel",
+        "Major",
+        "Captain",
+        "Lieutenant",
+        "Warrant Officer",
+        "Sergeant",
+        "Corporal",
+        "Specialist",
+        "Private",
+      ],
+      avatorPreviewURL: process.env.PUBLIC_URL + "/defaultUSArmy.png",
     };
   }
 
@@ -46,7 +59,11 @@ class CreateUser extends Component {
   }
 
   onAvatorInputChange = (e) => {
-    this.setState({ avatorInput: e.target.files[0] });
+    console.log(e.target.files[0]);
+    this.setState({
+      avatorInput: e.target.files[0],
+      avatorPreviewURL: URL.createObjectURL(e.target.files[0]),
+    });
   };
 
   onNameInputChange = (e) => {
@@ -88,14 +105,16 @@ class CreateUser extends Component {
       <div>
         <h1> Create New User</h1>
         <form onSubmit={this.handleSubmit}>
+          <img src={this.state.avatorPreviewURL} width="200" />
+          <br></br>
           <label>Avator: </label>
           <br></br>
           <input
             type="file"
             id="image"
             name="image"
+            accept="image/png"
             onChange={this.onAvatorInputChange}
-            required
           ></input>
           <br></br>
           <br></br>
@@ -104,41 +123,86 @@ class CreateUser extends Component {
           <input
             value={this.state.nameInput}
             onChange={this.onNameInputChange}
+            required
           ></input>
           <br></br>
           <label>rank: </label>
           <br></br>
-          <input
+          <select
             value={this.state.rankInput}
             onChange={this.onRankInputChange}
-          ></input>
+            required
+          >
+            <option disabled hidden value="">
+              --select an option --
+            </option>
+            {this.state.allRanks.map((rank) => {
+              return (
+                <option value={rank} key={rank}>
+                  {rank}
+                </option>
+              );
+            })}
+          </select>
           <br></br>
           <label>Sex: </label>
           <br></br>
           <input
-            value={this.state.sexInput}
+            type="radio"
+            id="male"
+            name="gender"
+            value="male"
             onChange={this.onSexInputChange}
-          ></input>
+            required
+          />
+          <label htmlFor="male">Male</label>
+          <br />
+          <input
+            type="radio"
+            id="female"
+            name="gender"
+            value="female"
+            onChange={this.onSexInputChange}
+          />
+          <label htmlFor="female">Female</label>
+          <br />
+          <input
+            type="radio"
+            id="other"
+            name="gender"
+            value="other"
+            onChange={this.onSexInputChange}
+          />
+          <label htmlFor="other">Other</label>
+          <br />
           <br></br>
           <label>startDate: </label>
           <br></br>
           <input
             value={this.state.startDateInput}
             onChange={this.onStartDateInputChange}
+            placeholder="MM/DD/YYYY"
+            pattern="^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}$"
+            required
           ></input>
           <br></br>
           <label>Phone: </label>
           <br></br>
           <input
+            type="number"
             value={this.state.phoneInput}
             onChange={this.onPhoneInputChange}
+            required
           ></input>
           <br></br>
           <label>Email: </label>
           <br></br>
           <input
+            type="email"
             value={this.state.emailInput}
             onChange={this.onEmailInputChange}
+            placeholder="example@xxxxx.xxx"
+            required
           ></input>
           <br></br>
           <label>Superior</label>
