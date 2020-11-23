@@ -7,9 +7,6 @@ import { withRouter } from "react-router";
 class UserList extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      hasMore: true,
-    };
   }
 
   componentDidMount() {
@@ -45,23 +42,6 @@ class UserList extends Component {
 
   // infinite scroll functions
   fetchMoreData = () => {
-    console.log(
-      "the true search count",
-      this.props.users.data[0].searchCount[0].count
-        ? this.props.users.data[0].searchCount[0].count
-        : 0
-    );
-    if (
-      this.props.users.data[0].users.length >=
-      (this.props.users.data[0].searchCount[0].count
-        ? this.props.users.data[0].searchCount[0].count
-        : 0)
-    ) {
-      console.log("setted hasMore to false");
-      this.setState({ hasMore: false });
-      return;
-    }
-
     // once made sure there's more data
     // get more user date
     //console.log("pageInfo at adding more: ", this.props.pageInfo.state);
@@ -84,12 +64,24 @@ class UserList extends Component {
       } else {
         if (data[0]) {
           console.log(data[0]);
+          console.log(
+            "the true search count",
+            this.props.users.data[0].searchCount[0]
+              ? this.props.users.data[0].searchCount[0].count
+              : 0
+          );
+          console.log("data Count", this.props.users.data[0].users.length);
           return (
             <div>
               <InfiniteScroll
                 dataLength={data[0].users.length}
                 next={this.fetchMoreData}
-                hasMore={this.state.hasMore}
+                hasMore={
+                  this.props.users.data[0].users.length <
+                  (this.props.users.data[0].searchCount[0]
+                    ? this.props.users.data[0].searchCount[0].count
+                    : 0)
+                }
                 loader={<h4>Loading...</h4>}
                 height={200}
                 endMessage={
