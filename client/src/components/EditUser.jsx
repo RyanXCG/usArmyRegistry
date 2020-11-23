@@ -51,7 +51,7 @@ class EditUser extends Component {
       .then((res) => {
         console.log("all users", res.data);
         this.setState({
-          allUsers: res.data,
+          allUsers: res.data[0].users,
         });
         axios
           .get(`/api/users/${id}`)

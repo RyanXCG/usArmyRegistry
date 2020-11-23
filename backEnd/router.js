@@ -228,32 +228,6 @@ router.get("/users/:id", (req, res) => {
   );
 });
 
-/*
-router.get("/count", (req, res) => {
-  console.log(req.query.search);
-  let regSearch = new RegExp("^" + req.query.search);
-  User.aggregate(
-    [
-      {
-        $match: {
-          $or: [{ name: regSearch }, { sex: regSearch }, { rank: regSearch }],
-        },
-      },
-      {
-        $count: "count",
-      },
-    ],
-    (err, count) => {
-      if (err) {
-        res.status(500).send(err);
-        console.log(err);
-      }
-      res.status(200).json(count);
-    }
-  );
-});
-*/
-
 router.delete("/:id", (req, res) => {
   //find all this id's direct children and then update their superior
   console.log(

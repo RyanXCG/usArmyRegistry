@@ -49,7 +49,7 @@ class CreateUser extends Component {
         this.setState({
           allUsers: [
             { _id: "", name: "no superior selected", email: "N/A" },
-            ...res.data,
+            ...res.data[0].users,
           ],
         });
       })

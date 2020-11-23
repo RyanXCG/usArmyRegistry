@@ -86,7 +86,7 @@ class UserList extends Component {
                 height={200}
                 endMessage={
                   <p style={{ textAlign: "center" }}>
-                    <b>Yay! You have seen it all</b>
+                    <b>No More Users</b>
                   </p>
                 }
               >
