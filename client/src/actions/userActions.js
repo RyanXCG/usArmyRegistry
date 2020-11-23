@@ -78,21 +78,6 @@ export const getUsersByIDs = (IDsarr) => {
   };
 };
 
-export const getCount = (search) => {
-  return (dispatch, store) => {
-    dispatch(requestStart());
-    axios
-      .get(`/api/count?search=${search}`)
-      .then((res) => {
-        dispatch(requestSuccess(res.data));
-      })
-      .catch((err) => {
-        console.log("fail");
-        dispatch(requestFail(err));
-      });
-  };
-};
-
 export const addUser = (input) => {
   return (dispatch, store) => {
     dispatch(requestStart());

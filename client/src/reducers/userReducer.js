@@ -1,4 +1,4 @@
-const initState = { isFetching: false, data: [], err: null };
+const initState = { isFetching: false, data: {}, err: null };
 
 const userReducer = (state = initState, action) => {
   switch (action.type) {

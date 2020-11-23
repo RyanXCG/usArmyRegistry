@@ -146,28 +146,35 @@ router.get("/users", (req, res) => {
           $or: [{ name: regSearch }, { rank: regSearch }, { sex: regSearch }],
         },
       },
-      { $sort: { [req.query.sortMethod]: parseInt(req.query.sortDir) } },
-      { $limit: req.query.page * 5 },
       {
-        $lookup: {
-          from: "users",
-          let: { sup_id: "$supID" },
-          pipeline: [
-            { $match: { $expr: { $eq: ["$_id", "$$sup_id"] } } },
-            { $project: { name: 1 } },
+        $facet: {
+          searchCount: [{ $count: "count" }],
+          users: [
+            { $sort: { [req.query.sortMethod]: parseInt(req.query.sortDir) } },
+            { $limit: req.query.page * 5 },
+            {
+              $lookup: {
+                from: "users",
+                let: { sup_id: "$supID" },
+                pipeline: [
+                  { $match: { $expr: { $eq: ["$_id", "$$sup_id"] } } },
+                  { $project: { name: 1 } },
+                ],
+                as: "supName",
+              },
+            },
+            {
+              $lookup: {
+                from: "users",
+                let: { target_id: "$_id" },
+                pipeline: [
+                  { $match: { $expr: { $eq: ["$supID", "$$target_id"] } } },
+                  { $project: { _id: 1 } },
+                ],
+                as: "subs",
+              },
+            },
           ],
-          as: "supName",
-        },
-      },
-      {
-        $lookup: {
-          from: "users",
-          let: { target_id: "$_id" },
-          pipeline: [
-            { $match: { $expr: { $eq: ["$supID", "$$target_id"] } } },
-            { $project: { _id: 1 } },
-          ],
-          as: "subs",
         },
       },
     ],
@@ -221,6 +228,7 @@ router.get("/users/:id", (req, res) => {
   );
 });
 
+/*
 router.get("/count", (req, res) => {
   console.log(req.query.search);
   let regSearch = new RegExp("^" + req.query.search);
@@ -244,6 +252,7 @@ router.get("/count", (req, res) => {
     }
   );
 });
+*/
 
 router.delete("/:id", (req, res) => {
   //find all this id's direct children and then update their superior

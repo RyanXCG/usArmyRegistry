@@ -5,7 +5,6 @@ const initState = {
   page: 1,
   sortMethod: "name",
   sortDir: 1,
-  count: 0,
   err: null,
 };
 
@@ -19,13 +18,6 @@ const pageInfoReducer = (state = initState, action) => {
       };
     case "UPDATE_PAGEINFO_SUCCESS":
       return action.payload;
-    case "GET_COUNT_SUCCESS":
-      console.log("paload", action.payload);
-      return {
-        ...state,
-        count: action.payload,
-        err: null,
-      };
 
     default:
       return state;

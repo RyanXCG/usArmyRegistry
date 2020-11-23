@@ -13,13 +13,6 @@ function updatePageInfoSuccess(pageInfo) {
   };
 }
 
-function getCountSuccess(count) {
-  return {
-    type: "GET_COUNT_SUCCESS",
-    payload: count,
-  };
-}
-
 export const updatePageInfo = (params) => {
   const { page, search, sortMethod, sortDir } = params;
   return (dispatch, store) => {
@@ -35,20 +28,6 @@ export const updatePageInfo = (params) => {
       .catch((err) => {
         console.log("fail");
         dispatch(requestFail(err));
-      });
-  };
-};
-
-export const getCount = (search) => {
-  return (dispatch, store) => {
-    axios
-      .get(`/api/count?search=${search}`)
-      .then((res) => {
-        console.log(res);
-        dispatch(getCountSuccess(res.data[0].count));
-      })
-      .catch((err) => {
-        console.log("get count fail");
       });
   };
 };

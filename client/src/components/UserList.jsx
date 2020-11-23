@@ -1,6 +1,6 @@
 import { React, Component } from "react";
 import { getUsers, deleteUser, getUsersByIDs } from "../actions/userActions";
-import { addPage, getCount } from "../actions/pageAction";
+import { addPage } from "../actions/pageAction";
 import { connect } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { withRouter } from "react-router";
@@ -14,8 +14,6 @@ class UserList extends Component {
 
   componentDidMount() {
     this.props.getUsers(this.props.pageInfo);
-    // get the total number of document
-    this.props.getCount(this.props.pageInfo.search);
   }
 
   onDeleteClicked(id, supID) {
@@ -47,8 +45,19 @@ class UserList extends Component {
 
   // infinite scroll functions
   fetchMoreData = () => {
-    console.log("(this.props.users.data.length", this.props.users.data.length);
-    if (this.props.users.data.length >= this.props.pageInfo.count) {
+    console.log(
+      "the true search count",
+      this.props.users.data[0].searchCount[0].count
+        ? this.props.users.data[0].searchCount[0].count
+        : 0
+    );
+    if (
+      this.props.users.data[0].users.length >=
+      (this.props.users.data[0].searchCount[0].count
+        ? this.props.users.data[0].searchCount[0].count
+        : 0)
+    ) {
+      console.log("setted hasMore to false");
       this.setState({ hasMore: false });
       return;
     }
@@ -73,79 +82,85 @@ class UserList extends Component {
       if (err) {
         return <div>There was an error to get the data</div>;
       } else {
-        console.log(data.length);
-        return (
-          <div className="UserList">
-            <InfiniteScroll
-              dataLength={this.props.users.data.length}
-              next={this.fetchMoreData}
-              hasMore={this.state.hasMore}
-              loader={<h4>Loading...</h4>}
-              height={200}
-              endMessage={
-                <p style={{ textAlign: "center" }}>
-                  <b>Yay! You have seen it all</b>
-                </p>
-              }
-            >
-              <table>
-                <tbody style={{ height: 300, overflow: "auto" }}>
-                  {data.map((user) => {
-                    return (
-                      <tr key={user._id}>
-                        <td>
-                          <button onClick={() => this.onEditClicked(user)}>
-                            Edit
-                          </button>
-                        </td>
-                        <td>
-                          <button
+        if (data[0]) {
+          console.log(data[0]);
+          return (
+            <div>
+              <InfiniteScroll
+                dataLength={data[0].users.length}
+                next={this.fetchMoreData}
+                hasMore={this.state.hasMore}
+                loader={<h4>Loading...</h4>}
+                height={200}
+                endMessage={
+                  <p style={{ textAlign: "center" }}>
+                    <b>Yay! You have seen it all</b>
+                  </p>
+                }
+              >
+                <table>
+                  <tbody style={{ height: 300, overflow: "auto" }}>
+                    {data[0].users.map((user) => {
+                      return (
+                        <tr key={user._id}>
+                          <td>
+                            <button onClick={() => this.onEditClicked(user)}>
+                              Edit
+                            </button>
+                          </td>
+                          <td>
+                            <button
+                              onClick={() =>
+                                this.onDeleteClicked(
+                                  user._id,
+                                  user.supID ? user.supID : ""
+                                )
+                              }
+                            >
+                              Delete
+                            </button>
+                          </td>
+                          <td>
+                            <img
+                              src={`data:image/png;base64,${user.avator.data}`}
+                              width="50"
+                            />
+                          </td>
+                          <td>{user.name}</td>
+                          <td>{user.sex}</td>
+                          <td>{user.rank}</td>
+                          <td>{user.startDate}</td>
+                          <td onClick={() => this.onPhoneClicked(user.phone)}>
+                            {user.phone}
+                          </td>
+                          <td onClick={() => this.onEmailClicked(user.email)}>
+                            {user.email}
+                          </td>
+                          <td
+                            onClick={() => this.onSupNameClicked([user.supID])}
+                          >
+                            {user.supName.length !== 0 && user.supName[0].name}
+                          </td>
+                          <td
                             onClick={() =>
-                              this.onDeleteClicked(
-                                user._id,
-                                user.supID ? user.supID : ""
+                              this.onNumOfDSClicked(
+                                user.subs.map((obj) => obj._id)
                               )
                             }
                           >
-                            Delete
-                          </button>
-                        </td>
-                        <td>
-                          <img
-                            src={`data:image/png;base64,${user.avator.data}`}
-                            width="50"
-                          />
-                        </td>
-                        <td>{user.name}</td>
-                        <td>{user.sex}</td>
-                        <td>{user.rank}</td>
-                        <td>{user.startDate}</td>
-                        <td onClick={() => this.onPhoneClicked(user.phone)}>
-                          {user.phone}
-                        </td>
-                        <td onClick={() => this.onEmailClicked(user.email)}>
-                          {user.email}
-                        </td>
-                        <td onClick={() => this.onSupNameClicked([user.supID])}>
-                          {user.supName.length !== 0 && user.supName[0].name}
-                        </td>
-                        <td
-                          onClick={() =>
-                            this.onNumOfDSClicked(
-                              user.subs.map((obj) => obj._id)
-                            )
-                          }
-                        >
-                          {user.subs.length}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </InfiniteScroll>
-          </div>
-        );
+                            {user.subs.length}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </InfiniteScroll>
+            </div>
+          );
+        } else {
+          return <div>loading the freaking data</div>;
+        }
       }
     }
   }
@@ -168,9 +183,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     addPage: () => {
       dispatch(addPage());
-    },
-    getCount: (search) => {
-      dispatch(getCount(search));
     },
     getUsersByIDs: (IDs) => {
       dispatch(getUsersByIDs(IDs));
