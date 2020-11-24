@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { addUser } from "../actions/userActions";
 import { connect } from "react-redux";
 import axios from "axios";
+import "../cssFiles/createUser.css";
 
 class CreateUser extends Component {
   constructor(props) {
@@ -102,7 +103,7 @@ class CreateUser extends Component {
 
   render() {
     return (
-      <div>
+      <div className="createUser">
         <h1> Create New User</h1>
         <form onSubmit={this.handleSubmit}>
           <img src={this.state.avatorPreviewURL} width="200" />

@@ -1,9 +1,13 @@
 import { React, Component } from "react";
 import { connect } from "react-redux";
 import { updatePageInfo } from "../actions/pageAction";
-
+import "../cssFiles/tableHead.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSortUp,
+  faSortDown,
+  faRedoAlt,
+} from "@fortawesome/free-solid-svg-icons";
 
 class TableHeadAndReset extends Component {
   onSortButtonClicked = (button) => {
@@ -22,7 +26,9 @@ class TableHeadAndReset extends Component {
     return (
       <div className="TableHeadAndReset">
         <br></br>
-        <button onClick={() => this.onResetButtonClicked()}>Reset</button>
+        <button id="reset" onClick={() => this.onResetButtonClicked()}>
+          <FontAwesomeIcon icon={faRedoAlt} /> Reset
+        </button>
         <br></br>
         <table>
           <thead>

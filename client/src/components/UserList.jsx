@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { withRouter } from "react-router";
 import "../cssFiles/userList.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt, faEdit } from "@fortawesome/free-regular-svg-icons";
 class UserList extends Component {
   constructor(props) {
     super(props);
@@ -91,27 +93,27 @@ class UserList extends Component {
                   </p>
                 }
               >
-                <table id="users">
+                <table className="users">
                   <tbody style={{ height: 300, overflow: "auto" }}>
                     {data[0].users.map((user) => {
                       return (
                         <tr key={user._id}>
-                          <td>
-                            <button onClick={() => this.onEditClicked(user)}>
-                              Edit
-                            </button>
+                          <td
+                            className="clickable edit"
+                            onClick={() => this.onEditClicked(user)}
+                          >
+                            <FontAwesomeIcon icon={faEdit} />
                           </td>
-                          <td>
-                            <button
-                              onClick={() =>
-                                this.onDeleteClicked(
-                                  user._id,
-                                  user.supID ? user.supID : ""
-                                )
-                              }
-                            >
-                              Delete
-                            </button>
+                          <td
+                            className="clickable delete"
+                            onClick={() =>
+                              this.onDeleteClicked(
+                                user._id,
+                                user.supID ? user.supID : ""
+                              )
+                            }
+                          >
+                            <FontAwesomeIcon icon={faTrashAlt} />
                           </td>
                           <td>
                             <img
@@ -123,28 +125,33 @@ class UserList extends Component {
                           <td>{user.sex}</td>
                           <td>{user.rank}</td>
                           <td>{user.startDate}</td>
-                          <td onClick={() => this.onPhoneClicked(user.phone)}>
+                          <td
+                            className="clickable phone"
+                            onClick={() => this.onPhoneClicked(user.phone)}
+                          >
                             {user.phone}
                           </td>
                           <td
-                            className="email"
+                            className="clickable email"
                             onClick={() => this.onEmailClicked(user.email)}
                           >
                             {user.email}
                           </td>
                           <td
+                            className="clickable supName"
                             onClick={() => this.onSupNameClicked([user.supID])}
                           >
                             {user.supName.length !== 0 && user.supName[0].name}
                           </td>
                           <td
+                            className="clickable numDS"
                             onClick={() =>
                               this.onNumOfDSClicked(
                                 user.subs.map((obj) => obj._id)
                               )
                             }
                           >
-                            {user.subs.length}
+                            {user.subs.length !== 0 && user.subs.length}
                           </td>
                         </tr>
                       );
