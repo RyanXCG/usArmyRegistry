@@ -4,6 +4,7 @@ import { addPage } from "../actions/pageAction";
 import { connect } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { withRouter } from "react-router";
+import "../cssFiles/userList.css";
 class UserList extends Component {
   constructor(props) {
     super(props);
@@ -72,7 +73,7 @@ class UserList extends Component {
           );
           console.log("data Count", this.props.users.data[0].users.length);
           return (
-            <div>
+            <div className="tableBody">
               <InfiniteScroll
                 dataLength={data[0].users.length}
                 next={this.fetchMoreData}
@@ -86,7 +87,7 @@ class UserList extends Component {
                 height={200}
                 endMessage={
                   <p style={{ textAlign: "center" }}>
-                    <b>No More Users</b>
+                    <b>You have reached the bottom</b>
                   </p>
                 }
               >
