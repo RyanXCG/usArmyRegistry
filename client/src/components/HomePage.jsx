@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import SearchBar from "./SearchBar";
 import TableHeadAndReset from "./TableHeadAndReset";
 import UserList from "./UserList";
+import "../cssFiles/homePage.css";
 class HomePage extends Component {
   constructor(props) {
     super(props);

@@ -1,5 +1,48 @@
-.tableBody {
+.infiniteScroll {
+  font-family: Arial, Helvetica, sans-serif;
   background-color: ghostwhite;
   border: 2px solid dodgerblue;
+  border-radius: 6px;
+  width: auto;
+  max-width: 1000px;
+
+  margin-right: 15px;
+  margin-left: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  text-align: left;
+}
+
+#users {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#users td,
+#users th {
+  border: 1px solid #ddd;
+  padding: 2px;
+}
+
+#users tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#users tr:hover {
+  background-color: #ddd;
+}
+
+#users th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4caf50;
+  color: white;
+}
+
+.email {
+  font-style: italic;
+  text-decoration: underline;
   color: darkblue;
 }

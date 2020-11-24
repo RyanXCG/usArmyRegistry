@@ -73,7 +73,7 @@ class UserList extends Component {
           );
           console.log("data Count", this.props.users.data[0].users.length);
           return (
-            <div className="tableBody">
+            <div className="infiniteScroll">
               <InfiniteScroll
                 dataLength={data[0].users.length}
                 next={this.fetchMoreData}
@@ -91,7 +91,7 @@ class UserList extends Component {
                   </p>
                 }
               >
-                <table>
+                <table id="users">
                   <tbody style={{ height: 300, overflow: "auto" }}>
                     {data[0].users.map((user) => {
                       return (
@@ -126,7 +126,10 @@ class UserList extends Component {
                           <td onClick={() => this.onPhoneClicked(user.phone)}>
                             {user.phone}
                           </td>
-                          <td onClick={() => this.onEmailClicked(user.email)}>
+                          <td
+                            className="email"
+                            onClick={() => this.onEmailClicked(user.email)}
+                          >
                             {user.email}
                           </td>
                           <td
