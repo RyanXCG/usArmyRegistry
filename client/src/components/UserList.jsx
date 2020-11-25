@@ -94,10 +94,10 @@ class UserList extends Component {
                 }
               >
                 <table className="users">
-                  <tbody style={{ height: 300, overflow: "auto" }}>
+                  <tbody>
                     {data[0].users.map((user) => {
                       return (
-                        <tr key={user._id}>
+                        <tr className="bodyRows" key={user._id}>
                           <td
                             className="clickable edit"
                             onClick={() => this.onEditClicked(user)}
@@ -115,16 +115,16 @@ class UserList extends Component {
                           >
                             <FontAwesomeIcon icon={faTrashAlt} />
                           </td>
-                          <td>
+                          <td className="avator">
                             <img
                               src={`data:image/png;base64,${user.avator.data}`}
-                              width="50"
+                              width="50px"
                             />
                           </td>
-                          <td>{user.name}</td>
-                          <td>{user.sex}</td>
-                          <td>{user.rank}</td>
-                          <td>{user.startDate}</td>
+                          <td className="name">{user.name}</td>
+                          <td className="sex">{user.sex}</td>
+                          <td className="rank">{user.rank}</td>
+                          <td className="startDate">{user.startDate}</td>
                           <td
                             className="clickable phone"
                             onClick={() => this.onPhoneClicked(user.phone)}
