@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { updateUser } from "../actions/userActions";
 import { connect } from "react-redux";
 import axios from "axios";
+import "../cssFiles/createOrUpdateUser.css";
 
 class EditUser extends Component {
   constructor(props) {
@@ -135,9 +136,8 @@ class EditUser extends Component {
 
   render() {
     return (
-      <div>
+      <div class="updateUser">
         <h1> Edit User</h1>
-        <label>Current Avator: </label>
         <br></br>
         <img
           src={
@@ -153,15 +153,15 @@ class EditUser extends Component {
           <br></br>
           <input
             type="file"
-            id="image"
+            id="imageFileButton"
             name="image"
             onChange={this.onAvatorInputChange}
           ></input>
           <br></br>
           <br></br>
           <label>Name: </label>
-          <br></br>
           <input
+            type="text"
             value={this.state.nameInput}
             onChange={this.onNameInputChange}
             required
@@ -198,7 +198,7 @@ class EditUser extends Component {
             required
           />
           <label htmlFor="male">Male</label>
-          <br />
+
           <input
             type="radio"
             id="female"
@@ -208,7 +208,7 @@ class EditUser extends Component {
             onChange={this.onSexInputChange}
           />
           <label htmlFor="female">Female</label>
-          <br />
+
           <input
             type="radio"
             id="other"
@@ -223,6 +223,7 @@ class EditUser extends Component {
           <label>startDate: </label>
           <br></br>
           <input
+            type="text"
             value={this.state.startDateInput}
             onChange={this.onStartDateInputChange}
             placeholder="MM/DD/YYYY"
@@ -266,7 +267,9 @@ class EditUser extends Component {
           </select>
           <br></br>
           <br></br>
-          <button type="submit">Update User</button>
+          <button id="updateButton" type="submit">
+            Update User
+          </button>
         </form>
       </div>
     );

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { addUser } from "../actions/userActions";
 import { connect } from "react-redux";
 import axios from "axios";
-import "../cssFiles/createUser.css";
+import "../cssFiles/createOrUpdateUser.css";
 
 class CreateUser extends Component {
   constructor(props) {
@@ -112,7 +112,7 @@ class CreateUser extends Component {
           <br></br>
           <input
             type="file"
-            id="image"
+            id="imageFileButton"
             name="image"
             accept="image/png"
             onChange={this.onAvatorInputChange}
@@ -122,6 +122,7 @@ class CreateUser extends Component {
           <label>Name: </label>
           <br></br>
           <input
+            type="text"
             value={this.state.nameInput}
             onChange={this.onNameInputChange}
             required
@@ -157,7 +158,7 @@ class CreateUser extends Component {
             required
           />
           <label htmlFor="male">Male</label>
-          <br />
+
           <input
             type="radio"
             id="female"
@@ -166,7 +167,7 @@ class CreateUser extends Component {
             onChange={this.onSexInputChange}
           />
           <label htmlFor="female">Female</label>
-          <br />
+
           <input
             type="radio"
             id="other"
@@ -180,6 +181,7 @@ class CreateUser extends Component {
           <label>startDate: </label>
           <br></br>
           <input
+            type="text"
             value={this.state.startDateInput}
             onChange={this.onStartDateInputChange}
             placeholder="MM/DD/YYYY"
@@ -223,7 +225,9 @@ class CreateUser extends Component {
           </select>
           <br></br>
           <br></br>
-          <button type="submit">Add User</button>
+          <button id="updateButton" type="submit">
+            Add User
+          </button>
         </form>
       </div>
     );
